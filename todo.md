@@ -9,4 +9,4 @@
 
 - [x] Add a GitHub Pages deployment workflow and asset-safe production configuration.
 - [x] Create a public GitHub repository and push the current project.
-- [ ] Enable GitHub Pages and verify the live deployment URL.
+- [x] Enable GitHub Pages and verify the live deployment URL.
