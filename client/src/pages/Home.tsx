@@ -29,15 +29,17 @@ type MenuItem = {
   description: string;
   price: number;
   highlight?: string;
+  imageUrl?: string;
+  imageLabel?: string;
 };
 
 const menuItems: MenuItem[] = [
-  { id: 1, category: "Pizze", name: "Margherita", description: "Pomodoro, fiordilatte, basilico, olio evo.", price: 7.5, highlight: "Classica" },
+  { id: 1, category: "Pizze", name: "Margherita", description: "Pomodoro, fiordilatte, basilico, olio evo.", price: 7.5, highlight: "Classica", imageUrl: "/manus-storage/castello-hero-pizza_48aeba63.jpg", imageLabel: "Appena sfornata" },
   { id: 2, category: "Pizze", name: "Diavola", description: "Pomodoro, fiordilatte, salame piccante, miele al peperoncino.", price: 9, highlight: "Piccante" },
   { id: 3, category: "Pizze", name: "Ortolana", description: "Fiordilatte, verdure di stagione, olive, origano.", price: 9 },
   { id: 4, category: "Pizze", name: "Castello", description: "Crema di zucca, salsiccia, provola affumicata, rosmarino.", price: 10.5, highlight: "Della casa" },
   { id: 5, category: "Focacce", name: "Rosmarino", description: "Olio evo, rosmarino fresco, sale croccante.", price: 4.5 },
-  { id: 6, category: "Focacce", name: "Mortadella & Stracciatella", description: "Focaccia calda, mortadella, stracciatella, pistacchio.", price: 8.5, highlight: "Favorita" },
+  { id: 6, category: "Focacce", name: "Mortadella & Stracciatella", description: "Focaccia calda, mortadella, stracciatella, pistacchio.", price: 8.5, highlight: "Favorita", imageUrl: "/manus-storage/castello-focaccia_dd5c4744.jpg", imageLabel: "Calda & croccante" },
   { id: 7, category: "Sfizi", name: "Patate al forno", description: "Patate rustiche, paprika dolce, maionese al limone.", price: 4.5 },
   { id: 8, category: "Sfizi", name: "Supplì al ragù", description: "Riso al ragù, cuore filante, crosta dorata.", price: 3.5 },
   { id: 9, category: "Bibite", name: "Limonata del giorno", description: "Limoni, acqua frizzante, menta.", price: 3.5 },
@@ -94,7 +96,7 @@ export default function Home() {
 
       <header className="container relative z-30 flex h-[88px] items-center justify-between gap-4">
         <a href="#top" className="group flex items-center gap-3" aria-label="Torna all'inizio">
-          <img src="/manus-storage/castello-mark_969454a8.png" alt="Segno Castello" className="size-11 object-contain transition-transform duration-200 group-hover:rotate-3" />
+          <img src="/manus-storage/castello-mark_969454a8.png" alt="Segno Castello" className="size-12 object-contain transition-transform duration-200 group-hover:rotate-3" />
           <span className="leading-none">
             <strong className="display block text-[1.5rem] leading-[0.75] tracking-[-0.07em]">Castello</strong>
             <em className="mt-1.5 block text-[0.57rem] font-bold tracking-[0.15em] uppercase not-italic text-[#746d63]">Pizzeria & Focacceria</em>
@@ -106,7 +108,7 @@ export default function Home() {
           <a href="#dove" className="transition-colors hover:text-[#d53a22]">Dove siamo</a>
         </nav>
         <div className="hidden items-center gap-3 sm:flex">
-          <a href="#menu" className="relative inline-flex items-center gap-2 border border-[#231f1b] px-4 py-2.5 text-xs font-bold tracking-[0.1em] uppercase transition-all hover:bg-[#231f1b] hover:text-[#fffaf2] active:scale-[0.97]">
+          <a href="#menu" className="relative inline-flex items-center gap-2 border border-[#d53a22] bg-[#d53a22] px-4 py-2.5 text-xs font-bold tracking-[0.1em] text-white uppercase transition-all hover:border-[#231f1b] hover:bg-[#231f1b] active:scale-[0.97]">
             <ShoppingBag className="size-4" /> Il tuo ordine {quantity > 0 && <span className="flex size-5 items-center justify-center rounded-full bg-[#d53a22] text-[0.65rem] text-white">{quantity}</span>}
           </a>
         </div>
@@ -149,6 +151,7 @@ export default function Home() {
                 {filteredItems.map((item, index) => {
                   const itemQuantity = cart[item.id] ?? 0;
                   return <article key={item.id} className={`menu-ticket-item group relative py-6 ${index === 0 ? "md:border-t-0 md:pt-0" : ""}`}>
+                    {item.imageUrl && <div className="relative mb-4 h-28 overflow-hidden bg-[#231f1b]"><img src={item.imageUrl} alt={item.name} className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" /><span className="absolute bottom-0 left-0 bg-[#d53a22] px-2.5 py-1.5 text-[0.59rem] font-bold tracking-[0.13em] text-white uppercase">{item.imageLabel}</span></div>}
                     <div className="mb-3 flex items-start justify-between gap-4"><div><div className="mb-2 flex items-center gap-2">{item.highlight && <span className="rounded-full bg-[#dfe2d4] px-2 py-1 text-[0.58rem] font-bold tracking-[0.1em] uppercase text-[#24342c]">{item.highlight}</span>}<span className="text-[0.62rem] font-bold tracking-[0.13em] uppercase text-[#887f74]">{item.category}</span></div><h3 className="display text-[1.75rem] leading-[0.95] tracking-[-0.04em]">{item.name}</h3></div><span className="receipt-price font-mono text-sm font-bold tabular-nums">{formatPrice(item.price)}</span></div>
                     <p className="max-w-[26rem] pr-8 text-sm leading-relaxed text-[#6e675d]">{item.description}</p>
                     <div className="mt-5 flex items-center justify-between"><span className="text-[0.65rem] font-bold tracking-[0.13em] uppercase text-[#d53a22]">Scelto per te</span>{itemQuantity > 0 ? <div className="flex items-center border border-[#231f1b]"><button onClick={() => updateItem(item.id, -1)} className="flex size-8 items-center justify-center hover:bg-[#ebe4d7]" aria-label={`Rimuovi ${item.name}`}><Minus className="size-3" /></button><span className="flex w-7 justify-center text-xs font-bold tabular-nums">{itemQuantity}</span><button onClick={() => updateItem(item.id, 1)} className="flex size-8 items-center justify-center bg-[#231f1b] text-white transition-colors hover:bg-[#d53a22]" aria-label={`Aggiungi un'altra ${item.name}`}><Plus className="size-3" /></button></div> : <button onClick={() => updateItem(item.id, 1)} className="flex size-8 items-center justify-center border border-[#231f1b] transition-all hover:border-[#d53a22] hover:bg-[#d53a22] hover:text-white active:scale-[0.95]" aria-label={`Aggiungi ${item.name}`}><Plus className="size-4" /></button>}</div>
@@ -167,6 +170,18 @@ export default function Home() {
         </section>
 
         <section id="storia" className="scroll-mt-8 bg-[#dfe2d4] py-16 lg:py-24"><div className="container grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-end"><div className="relative"><div className="absolute -left-4 -top-4 size-20 rounded-full bg-[#d53a22]" /><img src="/manus-storage/castello-focaccia_dd5c4744.jpg" alt="Focaccia calda con rosmarino e pomodorini" className="relative aspect-[4/5] w-full max-w-md object-cover shadow-[14px_14px_0_#231f1b]" /></div><div className="lg:pb-4"><p className="eyebrow mb-5 text-[#d53a22]">Una cosa alla volta, bene</p><h2 className="display max-w-2xl text-5xl leading-[0.9] tracking-[-0.065em] sm:text-7xl">Non è fast food.<br /><em className="font-normal">È buon ritmo.</em></h2><div className="mt-8 grid max-w-xl gap-6 border-t border-[#231f1b] pt-6 sm:grid-cols-2"><p className="text-sm leading-relaxed text-[#4b5046]">L’impasto ha il suo tempo. Il forno fa il resto. Noi aggiungiamo soltanto gli ingredienti giusti.</p><p className="text-sm leading-relaxed text-[#4b5046]">Scegli con calma dal menu, salva l’ordine, e invialo quando sei pronto.</p></div></div></div></section>
+
+        <section className="overflow-hidden bg-[#fffdf8] py-16 lg:py-24">
+          <div className="container">
+            <div className="mb-10 flex flex-col justify-between gap-6 border-b border-[#231f1b] pb-7 lg:mb-14 lg:flex-row lg:items-end"><div className="flex items-start gap-4"><img src="/manus-storage/castello-mark_969454a8.png" alt="" className="mt-1 size-12 shrink-0 object-contain" /><div><p className="eyebrow mb-4 text-[#d53a22]">Dentro Castello</p><h2 className="display max-w-2xl text-5xl leading-[0.9] tracking-[-0.06em] sm:text-6xl">La focaccia vera,<br /><em className="font-normal">quella del banco.</em></h2></div></div><a href="https://www.facebook.com/p/Pizzeria-Focacceria-Castello-Castel-san-giovanni-100063768901533/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 self-start border-b border-[#d53a22] pb-2 text-xs font-bold tracking-[0.12em] text-[#d53a22] uppercase transition-colors hover:text-[#231f1b]">Vedi le foto del locale <ArrowUpRight className="size-4" /></a></div>
+            <p className="eyebrow mb-6 text-[#746d63]">Focaccia di Recco · Farinata · Pizza · Corso Matteotti 77</p>
+            <div className="grid gap-5 lg:grid-cols-[1.13fr_0.87fr]">
+              <figure className="relative overflow-hidden bg-[#231f1b]"><img src="/manus-storage/castello-real-focaccia-collage_b1f006b2.jpg" alt="Focaccia di Recco appena preparata da Pizzeria & Focacceria Castello" className="absolute inset-0 size-full origin-top-left scale-[1.72] object-cover object-left-top transition-transform duration-700 hover:scale-[1.78]" /><div className="absolute inset-0 bg-gradient-to-t from-[#231f1b]/65 via-transparent to-transparent" /><figcaption className="absolute bottom-0 left-0 right-0 flex items-end justify-between gap-4 p-5 text-white"><span className="text-[0.62rem] font-bold tracking-[0.13em] uppercase">Scatto reale · focaccia del locale</span><span className="display text-3xl leading-none">01</span></figcaption><div className="h-[295px] sm:h-[380px]" /></figure>
+              <figure className="relative overflow-hidden bg-[#231f1b]"><img src="/manus-storage/castello-real-counter_98a536f9.jpg" alt="Bancone con focacce e pizze di Pizzeria & Focacceria Castello" className="absolute inset-0 size-full object-cover transition-transform duration-700 hover:scale-[1.05]" /><div className="absolute inset-0 bg-gradient-to-t from-[#231f1b]/75 via-transparent to-transparent" /><figcaption className="absolute bottom-0 left-0 right-0 flex items-end justify-between gap-4 p-5 text-white"><span className="text-[0.62rem] font-bold tracking-[0.13em] uppercase">Scatto reale · il banco</span><span className="display text-3xl leading-none">02</span></figcaption><div className="h-[295px] sm:h-[380px]" /></figure>
+            </div>
+            <p className="mt-5 max-w-xl text-xs leading-relaxed text-[#746d63]">Immagini pubbliche del locale, curate per questa anteprima. Confermare l’autorizzazione del proprietario prima della pubblicazione definitiva.</p>
+          </div>
+        </section>
 
         <section id="dove" className="scroll-mt-8 bg-[#231f1b] text-[#fffaf2]"><div className="container grid lg:grid-cols-2"><div className="relative flex min-h-[430px] flex-col justify-between py-14 lg:py-20"><div className="absolute right-6 top-10 rotate-90 text-[0.59rem] font-bold tracking-[0.18em] text-[#d53a22] uppercase">Corso Matteotti / 77</div><div><p className="eyebrow mb-5 text-[#d53a22]">Passa a trovarci</p><h2 className="display max-w-lg text-5xl leading-[0.9] tracking-[-0.06em] sm:text-6xl">Ci trovi al centro.<br />Il forno pure.</h2></div><div className="mt-12 grid gap-6 sm:grid-cols-2"><div className="border-l border-[#d53a22] pl-4"><MapPin className="mb-3 size-4 text-[#d53a22]" /><p className="text-sm leading-relaxed text-[#e5ded2]">Corso Giacomo Matteotti 77<br />Castel San Giovanni, PC</p></div><div className="border-l border-[#d53a22] pl-4"><Phone className="mb-3 size-4 text-[#d53a22]" /><a href="tel:+390523881445" className="text-sm font-bold tracking-wide transition-colors hover:text-[#d53a22]">0523 881445</a><p className="mt-1 text-xs text-[#bcb2a6]">Per ordini e informazioni</p></div></div></div><div className="relative -mx-5 min-h-[370px] overflow-hidden sm:-mx-8 lg:-mr-12 lg:-ml-12"><img src="/manus-storage/castello-oven-evening_b6b090a9.jpg" alt="Forno a legna illuminato nella cucina" className="absolute inset-0 size-full object-cover opacity-90" /><div className="absolute inset-0 bg-gradient-to-r from-[#231f1b]/60 to-transparent" /><div className="absolute -right-12 -top-12 size-40 rounded-full border-[18px] border-[#d53a22]" /><div className="absolute bottom-7 left-7 flex items-center gap-3 text-xs font-bold tracking-[0.13em] uppercase"><span className="flex size-9 items-center justify-center rounded-full border border-white/35"><Flame className="size-4 text-[#d53a22]" /></span> Forno acceso</div></div></div></section>
       </main>
